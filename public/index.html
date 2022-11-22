@@ -20,12 +20,17 @@
         </div>
     </div>
     <h2 style="display: flex" id="connection-status"></h2>
-    <h2 style="display: flex" id="filters">Status filters:
-        <select id="select-filters">
-            <option>none</option>
-            <option>answered</option>
-        </select>
-    </h2>
+    <div class="filter-wrapper">
+        <div id="myBtnContainer">
+            <button class="btn active filter-option">All</button>
+            <button class="btn filter-option">Approved</button>
+            <button class="btn filter-option">Unapproved</button>
+        </div>
+        <div>
+            <input type="checkbox" id="one" />
+            <label for="one"> <span></span> Hide Answered </label>
+        </div>
+    </div>
 </header>
 <main class="faq-interface-main  faq-interface-main--ministry">
     <div class="faq-interface__content-wrapper  container">

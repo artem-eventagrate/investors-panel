@@ -2,15 +2,8 @@ jQuery(document).ready(async function () {
     let urlSearchParameters = new URLSearchParams(window.location.search);
 
     let stageList = new Map();
-    let filter = $('#select-filters').val();
-
-    $('#select-filters').on('change', function (e) {
-        filter = $('#select-filters').find(":selected").text();
-        $(".faq-interface__content-list").html("");
-        updateQuestionList();
-    });
-
-    console.log(filter);
+    let filter = "all";
+    let hideAnswered = false;
 
     stageList.set("exhibition01", {
         stageInnerId: "b89e5b24-f682-486e-bafa-50ab0c0c2645",
@@ -21,13 +14,35 @@ jQuery(document).ready(async function () {
         stageName: "Investors gallery 02"
     });
 
+    $('.filter-option').on('click', function (e) {
+        filter = e.target.innerText.toLowerCase();
+
+        for (let element of $('.filter-option')) {
+            if (filter === element.innerText.toLowerCase()) {
+                jQuery(element).addClass("active");
+            } else {
+                jQuery(element).removeClass("active");
+            }
+        }
+        $(".faq-interface__content-list").html("");
+        jQuery('.faq-interface-main').css({'display':'none'});
+        updateQuestionList();
+    });
+
+    $('#one').on('click', function (e) {
+        hideAnswered = e.target.checked;
+        $(".faq-interface__content-list").html("");
+        jQuery('.faq-interface-main').css({'display':'none'});
+        updateQuestionList();
+    });
+
     if(urlSearchParameters.has('stageId') && stageList.get(urlSearchParameters.get('stageId'))) {
         // Setup properties and agora
         var channelParameters = {
             appId: "a461a73b507042bcb2dda018dc794aee",
             isConnected: false,
             connectionStatus: "disconnected",
-            channel: stageList.get(urlSearchParameters.get('stageId')).stageInnerId,
+            channel: urlSearchParameters.get('stageId'),
             token: null,
             uid: 1,
             localAudioTrack: null,
@@ -91,28 +106,30 @@ jQuery(document).ready(async function () {
         function updateQuestionList() {
             let counter = 0;
             for (const [key, value] of questionList.entries()) {
-                if (filter === "answered") {
+                if (filter === "approved") {
                     if ($("#" + key).length === 0) {
-                        if (value.answered) {
+                        if (value.approved) {
                             appendNewRecord(value, counter);
-                            setRecordReadStatus(key.toString(), true);
-                        }
-                        jQuery('.faq-interface-main').css({'display': 'flex'});
-                    } else {
-                        if (value.answered) {
-                            setRecordReadStatus(key.toString(), true);
+                            if (value.answered && !hideAnswered) {
+                                setRecordReadStatus(key.toString(), true);
+                            }
                         }
                     }
                     counter++;
-                } else {
+                } else if (filter === "unapproved") {
+                    if ($("#" + key).length === 0) {
+                        if (!value.approved) {
+                            appendNewRecord(value, counter);
+                            if (value.answered && !hideAnswered) {
+                                setRecordReadStatus(key.toString(), true);
+                            }
+                        }
+                    }
+                    counter++;
+                }  else if (filter === "all") {
                     if ($("#" + key).length === 0) {
                         appendNewRecord(value, counter);
-                        if (value.answered) {
-                            setRecordReadStatus(key.toString(), true);
-                        }
-                        jQuery('.faq-interface-main').css({'display': 'flex'});
-                    } else {
-                        if (value.answered) {
+                        if (value.answered && !hideAnswered) {
                             setRecordReadStatus(key.toString(), true);
                         }
                     }
@@ -165,6 +182,8 @@ jQuery(document).ready(async function () {
                     setRecordReadStatus(questionId, true);
                 }
             });
+
+            jQuery('.faq-interface-main').css({'display': 'flex'});
         };
         function updateReplyButton() {
             if(channelParameters.connectionStatus === "disconnected") {
@@ -211,7 +230,7 @@ jQuery(document).ready(async function () {
                 recordElement.find(".faq-interface__content-list-item-question-wrapper--complete")
                     .toggleClass("faq-interface__content-list-item-question-wrapper--complete faq-interface__content-list-item-question-wrapper")
             }
-        }
+        };
 
         // ======================== MAIN SCRIPT ====================================================
         // Write questions from server

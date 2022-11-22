@@ -21,6 +21,7 @@ async function updateQuestionList(eventId, stageId) {
                 id: question.id,
                 userName: question.userName,
                 answered: false,
+                approved: question.approved,
                 text: question.question,
                 stageID: question.stageID
             });
