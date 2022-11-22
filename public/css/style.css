@@ -1,0 +1,302 @@
+@charset "UTF-8";
+
+/* futura pt demi */
+@font-face {
+    font-family: 'Futura PT';
+    font-style: normal;
+    font-weight: 500;
+    src: local(''),
+    url('../fonts/FuturaPT-Demi.ttf') format('truetype');
+}
+
+/* futura pt medium */
+@font-face {
+    font-family: 'Futura PT';
+    font-style: normal;
+    font-weight: 450;
+    src: local(''),
+    url('../fonts/FuturaPT-Medium.ttf') format('truetype');
+}
+
+
+/* style for ministry_of_tourism_faq */
+
+.flex {
+    display: flex;
+}
+
+.flex-dc {
+    flex-direction: column;
+}
+
+.flex-dr {
+    flex-direction: row;
+}
+
+.flex-jcc {
+    justify-content: center;
+}
+
+.flex-jcs {
+    justify-content: flex-start;
+}
+
+.flex-jcb {
+    justify-content: space-between;
+}
+
+.flex-jca {
+    justify-content: space-around;
+}
+
+.flex-jcf {
+    justify-content: flex-end;
+}
+
+.flex-alc {
+    align-items: center;
+}
+
+.flex-als {
+    align-items: flex-start;
+}
+
+.flex-ale {
+    align-items: flex-end;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.container {
+    width: auto;
+    max-width: 1600px;
+    /*     margin: auto; */
+    padding-left: 60px;
+    padding-right: 40px;
+}
+
+.faq-interface__all-img {
+    display: flex;
+
+    width: 100%;
+    height: auto;
+
+    -o-object-fit: contain;
+    object-fit: contain;
+}
+
+
+.faq-interface {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+
+    font-family: 'Futura PT';
+    font-weight: 450;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: #fff;
+
+    background-color: #232222;
+    background-image: url("../img/body-bgr.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.faq-interface-main {
+    display:none;
+}
+
+.faq-interface__header-wrapper {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.faq-interface__header-logo-wrapper {
+    max-width: 150px;
+}
+
+.faq-interface__header-title h1 {
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 51px;
+    letter-spacing: 0.1em;
+}
+
+.faq-interface__content {
+    position: relative;
+    max-width: 938px;
+    padding-bottom: 50px;
+}
+
+.faq-interface__content-list {
+    gap: 10px;
+
+    margin: 0;
+    margin-right: 25px;
+    padding: 0;
+
+    list-style-type: none;
+}
+
+.faq-interface__content-list-item {
+    position: relative;
+}
+
+.faq-interface__content-list-item-wrap {
+    gap: 10px;
+
+    min-height: 86px;
+    width: 100vh;
+    height: 100%;
+    padding: 20px 35px;
+
+    color: #fff;
+    background: #1A1A1A;
+    border-radius: 5px;
+
+    -webkit-transition: background .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -moz-transition: background .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -o-transition: background .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    transition: background .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    cursor: pointer;
+}
+
+.faq-interface__content-list-item-btn {
+    display: none;
+}
+
+/* click on item */
+.faq-interface__content-list-item-btn:checked ~ .faq-interface__content-list-item-wrap {
+    background: #FFFFFF;
+
+    -webkit-transition: background .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -moz-transition: background .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -o-transition: background .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    transition: background .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+}
+
+.faq-interface__content-list-item-btn:checked ~ .faq-interface__content-list-item-wrap .faq-interface__content-list-item-question-wrapper p {
+    color: #000;
+}
+
+.faq-interface__content-list-item-subtitle {
+    gap: 10px;
+
+    color: #EA8215;
+}
+
+.faq-interface__content-list-item-subtitle--complete,
+.faq-interface__content-list-item-question-wrapper--complete {
+    color: #646464;
+}
+
+.faq-interface__content-list-item-subtitle p{
+    margin: 0;
+
+    font-size: 16px;
+    line-height: 21px;
+}
+
+.faq-interface__content-list-item-question-wrapper p {
+    margin: 0;
+
+    font-size: 14px;
+    line-height: 18px;
+
+    -webkit-transition: color .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -moz-transition: color .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -o-transition: color .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+    transition: color .2s cubic-bezier(0.305, 0.475, 0.810, 1);
+}
+
+.faq-interface__content-list-item-complete {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    width: 19px;
+    height: 19px;
+}
+
+
+.faq-interface__content-list-item-reply {
+    position: sticky;
+    bottom: 10px;
+    margin-right: -25px;
+    margin-bottom: -40px;
+
+    -webkit-transition: visibility 0s .5s cubic-bezier(0.305, 0.475, 0.810, 1), opacity .3s .1s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -moz-transition: visibility 0s .5s cubic-bezier(0.305, 0.475, 0.810, 1), opacity .3s .1s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -o-transition: visibility 0s .5s cubic-bezier(0.305, 0.475, 0.810, 1), opacity .3s .1s cubic-bezier(0.305, 0.475, 0.810, 1);
+    transition: visibility 0s .5s cubic-bezier(0.305, 0.475, 0.810, 1), opacity .3s .1s cubic-bezier(0.305, 0.475, 0.810, 1);
+}
+
+.faq-interface__content-list-item-reply-btn {
+    display: none;
+}
+
+.faq-interface__content-list-item-reply-label {
+    gap: 10px;
+
+    cursor: pointer;
+}
+
+.faq-interface__content-list-item-reply-label-btn {
+    width: 101px;
+    height: 101px;
+
+    border-radius: 5px;
+    background-color: #EFA220;
+
+    -webkit-transition: background-color 4s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -moz-transition: background-color .4s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -o-transition: background-color .4s cubic-bezier(0.305, 0.475, 0.810, 1);
+    transition: background-color .4s cubic-bezier(0.305, 0.475, 0.810, 1);
+}
+
+/* .faq-interface__content-list-item-reply-label-btn::after {
+    content: '';
+    display: block;
+
+    width: 35px;
+    height: 54px;
+
+    -webkit-mask-image: url("../img/reply.svg");
+    mask-image: url("../img/reply.svg");
+    background-size: 35px, 54px, contain;
+    background-color: #000;
+
+    -webkit-transition: background-color .4s cubic-bezier(0.305, 0.475, 0.810, 1), mask-image .4s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -moz-transition: background-color .4s cubic-bezier(0.305, 0.475, 0.810, 1), mask-image .4s cubic-bezier(0.305, 0.475, 0.810, 1);
+    -o-transition: background-color .4s cubic-bezier(0.305, 0.475, 0.810, 1), mask-image .4s cubic-bezier(0.305, 0.475, 0.810, 1);
+    transition: background-color .4s cubic-bezier(0.305, 0.475, 0.810, 1), mask-image .4s cubic-bezier(0.305, 0.475, 0.810, 1);
+} */
+
+/* click on reply btn */
+/* .faq-interface__content-list-item-reply-btn:checked ~ .faq-interface__content-list-item-reply-label .faq-interface__content-list-item-reply-label-btn {
+    background: #EF202C;
+}
+
+.faq-interface__content-list-item-reply-btn:checked ~ .faq-interface__content-list-item-reply-label .faq-interface__content-list-item-reply-label-btn::after {
+    width: 60px;
+    height: 60px;
+
+    -webkit-mask-image: url("../img/pause.svg");
+    mask-image: url("../img/pause.svg");
+    background-size: 60px, 60px, contain;
+    background-color: #fff;
+} */
+
+/* .faq-interface__content-list-item-reply-label-text::after {
+    content: 'Click to reply';
+}
+
+.faq-interface__content-list-item-reply-btn:checked ~ .faq-interface__content-list-item-reply-label .faq-interface__content-list-item-reply-label-text::after {
+    content: 'Broadcasting';
+} */
+
+/* style for ministry_of_tourism_faq */

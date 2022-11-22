@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ministry of Tourism FAQ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="faq-interface  faq-interface--ministry">
+<header class="faq-interface__header-wrapper  container">
+    <div class="faq-interface__header  flex  flex-jcb  flex-alc">
+        <div class="faq-interface__header-title">
+            <h1>
+                Ministry of Tourism
+            </h1>
+        </div>
+        <div class="faq-interface__header-logo-wrapper">
+            <img class="faq-interface__all-img  faq-interface__header-logo" src="img/logo.png" alt="Ministry of Tourism logo">
+        </div>
+    </div>
+    <h2 style="display: flex" id="connection-status"></h2>
+    <h2 style="display: flex" id="filters">Status filters:
+        <select id="select-filters">
+            <option>none</option>
+            <option>answered</option>
+        </select>
+    </h2>
+</header>
+<main class="faq-interface-main  faq-interface-main--ministry">
+    <div class="faq-interface__content-wrapper  container">
+        <div class="faq-interface__content  flex  flex-ale">
+            <ul class="faq-interface__content-list  flex  flex-dc"></ul>
+            <div class="faq-interface__content-list-item-reply  flex">
+                <input type="checkbox" class="faq-interface__content-list-item-reply-btn" id="faq-interface__content-list-item-reply-btn--1">
+                <label class="faq-interface__content-list-item-reply-label  flex  flex-dc  flex-alc" for="faq-interface__content-list-item-reply-btn--1">
+                    <div class="faq-interface__content-list-item-reply-label-btn  flex  flex-jcc  flex-alc"></div>
+                    <div class="faq-interface__content-list-item-reply-label-text"></div>
+                </label>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="js/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.3/axios.min.js"></script>
+<script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.14.2.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
