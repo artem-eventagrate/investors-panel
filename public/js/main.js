@@ -17,8 +17,7 @@ jQuery(document).ready(async function () {
     });
 
     if(urlSearchParameters.has('stageId') && stageList.get(urlSearchParameters.get('stageId'))) {
-        // Setup idle detection
-        // Increment the idle time counter every minute.
+        // Setup idle detection rate
         let idleInterval = setInterval(timerIncrement, 60000); // 1 minute
 
         // Zero the idle timer on mouse movement.
@@ -68,6 +67,23 @@ jQuery(document).ready(async function () {
                 channelParameters.isConnected = true;
                 channelParameters.connectionStatus = "connected";
                 updateReplyButton();
+
+                for (element of $('.faq-interface__content-list-item')) {
+                    if ($(element).children(".faq-interface__content-list-item-btn").is(":checked")) {
+                        let questionId = $(element).attr('id');
+                        if (!questionList.get(questionId).answered) {
+                            let questionUpdate = questionList.get(questionId);
+                            questionUpdate.answered = true;
+                            questionList.set(questionId, questionUpdate);
+                            axios.post(apiUrl + '/api/updateQuestionList', {
+                                questionId: questionId,
+                                answered: true
+                            });
+                            console.log("Set " + questionId + " as answered")
+                            setRecordReadStatus(questionId, true);
+                        }
+                    }
+                }
             }
         }
         async function agoraSDKDisconnect() {
@@ -110,10 +126,6 @@ jQuery(document).ready(async function () {
                                 if (value.answered)
                                     setRecordReadStatus(key.toString(), true);
                             }
-                            // appendNewRecord(value, counter);
-                            // if (value.answered) {
-                            //     setRecordReadStatus(key.toString(), true);
-                            // }
                         }
                     }
                     counter++;
@@ -129,10 +141,6 @@ jQuery(document).ready(async function () {
                                 if (value.answered)
                                     setRecordReadStatus(key.toString(), true);
                             }
-                            // appendNewRecord(value, counter);
-                            // if (value.answered && !hideAnswered) {
-                            //     setRecordReadStatus(key.toString(), true);
-                            // }
                         }
                     }
                     counter++;
@@ -187,14 +195,17 @@ jQuery(document).ready(async function () {
                 let questionId = jQuery(this).attr('id');
 
                 if (channelParameters.connectionStatus === "connected") {
-                    questionList.set(questionId, questionList.get(questionId).answered = true);
-                    axios.post(apiUrl + '/api/updateQuestionList', {
-                        questionId: questionId,
-                        answered: true
-                    });
-                    console.log("click" + questionId);
-
-                    setRecordReadStatus(questionId, true);
+                    if (!questionList.get(questionId).answered) {
+                        let questionUpdate = questionList.get(questionId);
+                        questionUpdate.answered = true;
+                        questionList.set(questionId, questionUpdate);
+                        axios.post(apiUrl + '/api/updateQuestionList', {
+                            questionId: questionId,
+                            answered: true
+                        });
+                        console.log("Set " + questionId + " as answered")
+                        setRecordReadStatus(questionId, true);
+                    }
                 }
             });
 
