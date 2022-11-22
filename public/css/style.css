@@ -20,6 +20,9 @@
 
 
 /* style for ministry_of_tourism_faq */
+* {
+    box-sizing: border-box;
+}
 
 .flex {
     display: flex;
@@ -357,6 +360,10 @@ input:checked + label > span::before {
     transform: rotate(45deg);
     transform-origin: 0% 100%;
     animation: checked-box 125ms 250ms forwards;
+}
+
+#one {
+    display: none;
 }
 
 @keyframes checked-box {

@@ -14,30 +14,6 @@ jQuery(document).ready(async function () {
         stageName: "Investors gallery 02"
     });
 
-    $('.filter-option').on('click', async function (e) {
-        filter = e.target.innerText.toLowerCase();
-
-        for (let element of $('.filter-option')) {
-            if (filter === element.innerText.toLowerCase()) {
-                jQuery(element).addClass("active");
-            } else {
-                jQuery(element).removeClass("active");
-            }
-        }
-        $(".faq-interface__content-list").html("");
-        jQuery('.faq-interface-main').css({'display':'none'});
-        // await updateQuestionListData();
-        updateQuestionList();
-    });
-
-    $('#one').on('click', async function (e) {
-        hideAnswered = e.target.checked;
-        $(".faq-interface__content-list").html("");
-        jQuery('.faq-interface-main').css({'display':'none'});
-        // await updateQuestionListData();
-        updateQuestionList();
-    });
-
     if(urlSearchParameters.has('stageId') && stageList.get(urlSearchParameters.get('stageId'))) {
         // Setup properties and agora
         var channelParameters = {
@@ -283,6 +259,29 @@ jQuery(document).ready(async function () {
             } else {
                 console.log("[INFO] AgoraSDK: Connection in progress, please wait a few moment");
             }
+        });
+        $('.filter-option').on('click', async function (e) {
+            filter = e.target.innerText.toLowerCase();
+
+            for (let element of $('.filter-option')) {
+                if (filter === element.innerText.toLowerCase()) {
+                    jQuery(element).addClass("active");
+                } else {
+                    jQuery(element).removeClass("active");
+                }
+            }
+            $(".faq-interface__content-list").html("");
+            jQuery('.faq-interface-main').css({'display':'none'});
+            await updateQuestionListData();
+            updateQuestionList();
+        });
+
+        $('#one').on('click', async function (e) {
+            hideAnswered = e.target.checked;
+            $(".faq-interface__content-list").html("");
+            jQuery('.faq-interface-main').css({'display':'none'});
+            await updateQuestionListData();
+            updateQuestionList();
         });
     } else {
         console.log("Incorrect stageId");
