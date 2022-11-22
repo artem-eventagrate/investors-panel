@@ -5,6 +5,7 @@ jQuery(document).ready(async function () {
     let filter = "all";
     let hideAnswered = false;
     let idleTime = 0;
+    let apiUrl = "http://localhost:8000";
 
     stageList.set("exhibition01", {
         stageInnerId: "b89e5b24-f682-486e-bafa-50ab0c0c2645",
@@ -88,7 +89,7 @@ jQuery(document).ready(async function () {
 
         // Setup functions
         async function updateQuestionListData() {
-            const { data } = await axios.get('http://localhost:8000/api/questionList?stageId=' +
+            const { data } = await axios.get(apiUrl + '/api/questionList?stageId=' +
                 stageList.get(urlSearchParameters.get('stageId')).stageInnerId);
             for (let question of data) {
                 questionList.set(question.id, question);
@@ -187,7 +188,7 @@ jQuery(document).ready(async function () {
 
                 if (channelParameters.connectionStatus === "connected") {
                     questionList.set(questionId, questionList.get(questionId).answered = true);
-                    axios.post('http://localhost:8000/api/updateQuestionList', {
+                    axios.post(apiUrl + '/api/updateQuestionList', {
                         questionId: questionId,
                         answered: true
                     });
