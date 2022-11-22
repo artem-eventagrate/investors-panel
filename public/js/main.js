@@ -4,6 +4,7 @@ jQuery(document).ready(async function () {
     let stageList = new Map();
     let filter = "all";
     let hideAnswered = false;
+    let idleTime = 0;
 
     stageList.set("exhibition01", {
         stageInnerId: "b89e5b24-f682-486e-bafa-50ab0c0c2645",
@@ -15,8 +16,20 @@ jQuery(document).ready(async function () {
     });
 
     if(urlSearchParameters.has('stageId') && stageList.get(urlSearchParameters.get('stageId'))) {
+        // Setup idle detection
+        // Increment the idle time counter every minute.
+        let idleInterval = setInterval(timerIncrement, 60000); // 1 minute
+
+        // Zero the idle timer on mouse movement.
+        $(this).mousemove(function (e) {
+            idleTime = 0;
+        });
+        $(this).keypress(function (e) {
+            idleTime = 0;
+        });
+
         // Setup properties and agora
-        var channelParameters = {
+        let channelParameters = {
             appId: "a461a73b507042bcb2dda018dc794aee",
             isConnected: false,
             connectionStatus: "disconnected",
@@ -27,7 +40,7 @@ jQuery(document).ready(async function () {
             remoteAudioTrack: null,
             remoteUid: null
         };
-        var questionList = new Map();
+        let questionList = new Map();
 
         jQuery('#connection-status').text("Stage: " + stageList.get(urlSearchParameters.get('stageId')).stageName);
 
@@ -232,13 +245,21 @@ jQuery(document).ready(async function () {
                     .toggleClass("faq-interface__content-list-item-question-wrapper--complete faq-interface__content-list-item-question-wrapper")
             }
         };
+        function timerIncrement() {
+            idleTime = idleTime + 1;
+            if (idleTime > 9) { // 10 minutes
+                if(channelParameters.connectionStatus === "connected") {
+                    agoraSDKDisconnect();
+                }
+            }
+        };
 
         // ======================== MAIN SCRIPT ====================================================
         // Write questions from server
         await updateQuestionListData();
         updateQuestionList();
 
-        var intervalId = window.setInterval(function() {
+        let intervalId = window.setInterval(function() {
             console.log("Trigger update");
             updateQuestionListData();
             updateQuestionList();
@@ -247,7 +268,7 @@ jQuery(document).ready(async function () {
         updateReplyButton();
 
         // Connect to agora at micro-icon click
-        jQuery('.faq-interface__content-list-item-reply-label-btn').on('click', function () {
+        jQuery('.faq-interface__content-list-item-reply-label-btn').on('click', function (event) {
             if(channelParameters.connectionStatus === "disconnected") {
                 channelParameters.connectionStatus = "connecting";
                 updateReplyButton();
@@ -260,6 +281,22 @@ jQuery(document).ready(async function () {
                 console.log("[INFO] AgoraSDK: Connection in progress, please wait a few moment");
             }
         });
+
+        jQuery('.faq-interface__content-list-item-reply-btn').on('change', function (event) {
+            if(channelParameters.connectionStatus === "connecting") {
+                event.target.checked = true;
+            } else {
+                event.target.checked = false;
+            }
+        });
+
+        $("#address_cb").change(function(event) {
+            alert('foo');
+            event.preventDefault();
+            event.stopImmediatePropagation(); //Works
+            return false; //would call event.preventDefault() and event.stopPropagation() but not stopImmediatePropagation()
+        });
+
         $('.filter-option').on('click', async function (e) {
             filter = e.target.innerText.toLowerCase();
 
