@@ -14,7 +14,7 @@ jQuery(document).ready(async function () {
         stageName: "Investors gallery 02"
     });
 
-    $('.filter-option').on('click', function (e) {
+    $('.filter-option').on('click', async function (e) {
         filter = e.target.innerText.toLowerCase();
 
         for (let element of $('.filter-option')) {
@@ -26,13 +26,15 @@ jQuery(document).ready(async function () {
         }
         $(".faq-interface__content-list").html("");
         jQuery('.faq-interface-main').css({'display':'none'});
+        // await updateQuestionListData();
         updateQuestionList();
     });
 
-    $('#one').on('click', function (e) {
+    $('#one').on('click', async function (e) {
         hideAnswered = e.target.checked;
         $(".faq-interface__content-list").html("");
         jQuery('.faq-interface-main').css({'display':'none'});
+        // await updateQuestionListData();
         updateQuestionList();
     });
 
@@ -109,28 +111,51 @@ jQuery(document).ready(async function () {
                 if (filter === "approved") {
                     if ($("#" + key).length === 0) {
                         if (value.approved) {
-                            appendNewRecord(value, counter);
-                            if (value.answered && !hideAnswered) {
-                                setRecordReadStatus(key.toString(), true);
+                            if (hideAnswered) {
+                                if (!value.answered) {
+                                    appendNewRecord(value, counter);
+                                }
+                            } else {
+                                appendNewRecord(value, counter);
+                                if (value.answered)
+                                    setRecordReadStatus(key.toString(), true);
                             }
+                            // appendNewRecord(value, counter);
+                            // if (value.answered) {
+                            //     setRecordReadStatus(key.toString(), true);
+                            // }
                         }
                     }
                     counter++;
                 } else if (filter === "unapproved") {
                     if ($("#" + key).length === 0) {
                         if (!value.approved) {
-                            appendNewRecord(value, counter);
-                            if (value.answered && !hideAnswered) {
-                                setRecordReadStatus(key.toString(), true);
+                            if (hideAnswered) {
+                                if (!value.answered) {
+                                    appendNewRecord(value, counter);
+                                }
+                            } else {
+                                appendNewRecord(value, counter);
+                                if (value.answered)
+                                    setRecordReadStatus(key.toString(), true);
                             }
+                            // appendNewRecord(value, counter);
+                            // if (value.answered && !hideAnswered) {
+                            //     setRecordReadStatus(key.toString(), true);
+                            // }
                         }
                     }
                     counter++;
                 }  else if (filter === "all") {
                     if ($("#" + key).length === 0) {
-                        appendNewRecord(value, counter);
-                        if (value.answered && !hideAnswered) {
-                            setRecordReadStatus(key.toString(), true);
+                        if (hideAnswered) {
+                            if (!value.answered) {
+                                appendNewRecord(value, counter);
+                            }
+                        } else {
+                            appendNewRecord(value, counter);
+                            if (value.answered)
+                                setRecordReadStatus(key.toString(), true);
                         }
                     }
                     counter++;
