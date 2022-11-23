@@ -132,10 +132,6 @@ jQuery(document).ready(async function () {
             }
         };
 
-        async function updateQuestionListData() {
-            const { data } = await axios.post(apiUrl + '/api/updateQuestionList/');
-        };
-
         function updateQuestionList() {
             let counter = 0;
             for (const [key, value] of questionList.entries()) {
@@ -299,10 +295,9 @@ jQuery(document).ready(async function () {
 
         let intervalId = window.setInterval(async function() {
             console.log("Trigger update");
-            await updateQuestionListData;
             await getQuestionListData();
             updateQuestionList();
-        }, 30000);
+        }, 15000);
 
         updateReplyButton();
 
@@ -348,7 +343,7 @@ jQuery(document).ready(async function () {
             }
             $(".faq-interface__content-list").html("");
             jQuery('.faq-interface-main').css({'display':'none'});
-            await getQuestionListData();
+            // await getQuestionListData();
             updateQuestionList();
         });
 
@@ -356,7 +351,7 @@ jQuery(document).ready(async function () {
             hideAnswered = e.target.checked;
             $(".faq-interface__content-list").html("");
             jQuery('.faq-interface-main').css({'display':'none'});
-            await getQuestionListData();
+            // await getQuestionListData();
             updateQuestionList();
         });
     } else {

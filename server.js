@@ -38,7 +38,10 @@ function restoreAnsweredList() {
             if (err) throw err;
 
             if (data.toString().length > 0) {
+                console.log("Found preserved data")
                 putNewAnsweredQuestion(JSON.parse(data));
+            } else {
+                console.log("Local answered list is empty")
             }
         });
     }
@@ -71,10 +74,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // API
-app.get('/api/questionList/:stageId', async (req, res) => {
+app.get('/api/questionList/:stageId', (req, res) => {
     let result = [];
     for (const [key, value] of questionList.entries()) {
-        if (value.stageID == req.params.stageId) {
+        if (value.stageID === req.params.stageId) {
             let questionObject = value;
             if (answeredList.has(value.id)) {
                 questionObject.answered = answeredList.get(value.id);
@@ -93,11 +96,6 @@ app.post('/api/updateQuestion', async (req, res) => {
     res.json("OK");
 })
 
-app.post('/api/updateQuestionList', async (req, res) => {
-    await updateQuestionList();
-    res.json("OK");
-})
-
 // Server
 app.use(express.static('public'))
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
@@ -105,6 +103,11 @@ app.listen(serverPort, async () => {
     console.log("System: Listening on " + serverPort);
     await updateQuestionList();
     restoreAnsweredList();
+
+    setInterval(async function() {
+        await updateQuestionList();
+        console.log("Trigger update");
+    }, 30000)
 });
 
 process.on('uncaughtException', err => {
