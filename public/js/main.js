@@ -102,6 +102,7 @@ jQuery(document).ready(async function () {
                             });
                             console.log("Set " + questionId + " as answered")
                             setRecordReadStatus(questionId, true);
+                            updateQuestionList();
                         }
                     }
                 }
@@ -133,6 +134,9 @@ jQuery(document).ready(async function () {
         };
 
         function updateQuestionList() {
+            console.log("updateQuestionList")
+            $(".faq-interface__content-list").html("");
+            jQuery('.faq-interface-main').css({'display':'none'});
             let counter = 0;
             for (const [key, value] of questionList.entries()) {
                 if (filter === "approved") {
@@ -227,6 +231,7 @@ jQuery(document).ready(async function () {
                         });
                         console.log("Set " + questionId + " as answered")
                         setRecordReadStatus(questionId, true);
+                        updateQuestionList();
                     }
                 }
             });
@@ -349,9 +354,6 @@ jQuery(document).ready(async function () {
 
         $('#one').on('click', async function (e) {
             hideAnswered = e.target.checked;
-            $(".faq-interface__content-list").html("");
-            jQuery('.faq-interface-main').css({'display':'none'});
-            // await getQuestionListData();
             updateQuestionList();
         });
     } else {
