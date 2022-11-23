@@ -7,13 +7,35 @@ jQuery(document).ready(async function () {
     let idleTime = 0;
     let apiUrl = "http://localhost:8000";
 
-    stageList.set("exhibition01", {
-        stageInnerId: "b89e5b24-f682-486e-bafa-50ab0c0c2645",
-        stageName: "Investors gallery 01"
+    stageList.set("1db2b01a-e4ce-4e4d-981b-dab2fc06e94c", {
+        stageInnerId: "exhibition01",
+        // stageInnerId: "b89e5b24-f682-486e-bafa-50ab0c0c2645",
+        stageName: "MINISTRY OF TOURISM"
     });
-    stageList.set("exhibition02", {
-        stageInnerId: "fdda15a5-c096-4391-a52d-055f3b5374b6",
-        stageName: "Investors gallery 02"
+    stageList.set("b38f8bf1-de7a-46b1-aea4-c54209b28d6a", {
+        stageInnerId: "exhibition02",
+        // stageInnerId: "fdda15a5-c096-4391-a52d-055f3b5374b6",
+        stageName: "ACCELERATOR OF HUMAN PROGRESS (NEOM)"
+    });
+    stageList.set("ea0d36d5-74f7-47fc-b0b7-fbe05bf8bd1c", {
+        stageInnerId: "exhibition03",
+        stageName: "THE RED SEA DEVELOPMENT COMPANY"
+    });
+    stageList.set("de09bd18-05c4-48f8-9450-7fd5e1d5f13d", {
+        stageInnerId: "exhibition04",
+        stageName: "SHARQIA DEVELOPMENT AUTHORITY"
+    });
+    stageList.set("27ee2c81-4b00-4fa4-98cf-b6046f1cfe19", {
+        stageInnerId: "exhibition05",
+        stageName: "ASEER DEVELOPMENT AUTHORITY"
+    });
+    stageList.set("49585ac8-932d-4d72-9b70-76c60b0201ff", {
+        stageInnerId: "exhibition06",
+        stageName: "JEDDAH CENTRAL DEVELOPMENT COMPANY"
+    });
+    stageList.set("831f8d96-55d7-4874-82cf-7eb2ed6b8bb3", {
+        stageInnerId: "exhibition07",
+        stageName: "DIRIYAH GATE DEVELOPMENT AUTHORITY"
     });
 
     if(urlSearchParameters.has('stageId') && stageList.get(urlSearchParameters.get('stageId'))) {
@@ -33,7 +55,7 @@ jQuery(document).ready(async function () {
             appId: "a461a73b507042bcb2dda018dc794aee",
             isConnected: false,
             connectionStatus: "disconnected",
-            channel: urlSearchParameters.get('stageId'),
+            channel: stageList.get(urlSearchParameters.get('stageId')).stageInnerId,
             token: null,
             uid: 1,
             localAudioTrack: null,
@@ -41,7 +63,6 @@ jQuery(document).ready(async function () {
             remoteUid: null
         };
         let questionList = new Map();
-
         jQuery('#connection-status').text("Stage: " + stageList.get(urlSearchParameters.get('stageId')).stageName);
 
         // Setup Agora SDK
@@ -75,7 +96,7 @@ jQuery(document).ready(async function () {
                             let questionUpdate = questionList.get(questionId);
                             questionUpdate.answered = true;
                             questionList.set(questionId, questionUpdate);
-                            axios.post(apiUrl + '/api/updateQuestionList', {
+                            axios.post(apiUrl + '/api/updateQuestion', {
                                 questionId: questionId,
                                 answered: true
                             });
@@ -104,13 +125,17 @@ jQuery(document).ready(async function () {
         }
 
         // Setup functions
-        async function updateQuestionListData() {
-            const { data } = await axios.get(apiUrl + '/api/questionList?stageId=' +
-                stageList.get(urlSearchParameters.get('stageId')).stageInnerId);
+        async function getQuestionListData() {
+            const { data } = await axios.get(apiUrl + '/api/questionList/' + urlSearchParameters.get('stageId'));
             for (let question of data) {
                 questionList.set(question.id, question);
             }
         };
+
+        async function updateQuestionListData() {
+            const { data } = await axios.post(apiUrl + '/api/updateQuestionList/');
+        };
+
         function updateQuestionList() {
             let counter = 0;
             for (const [key, value] of questionList.entries()) {
@@ -196,10 +221,11 @@ jQuery(document).ready(async function () {
 
                 if (channelParameters.connectionStatus === "connected") {
                     if (!questionList.get(questionId).answered) {
+
                         let questionUpdate = questionList.get(questionId);
                         questionUpdate.answered = true;
                         questionList.set(questionId, questionUpdate);
-                        axios.post(apiUrl + '/api/updateQuestionList', {
+                        axios.post(apiUrl + '/api/updateQuestion', {
                             questionId: questionId,
                             answered: true
                         });
@@ -268,12 +294,13 @@ jQuery(document).ready(async function () {
 
         // ======================== MAIN SCRIPT ====================================================
         // Write questions from server
-        await updateQuestionListData();
+        await getQuestionListData();
         updateQuestionList();
 
-        let intervalId = window.setInterval(function() {
+        let intervalId = window.setInterval(async function() {
             console.log("Trigger update");
-            updateQuestionListData();
+            await updateQuestionListData;
+            await getQuestionListData();
             updateQuestionList();
         }, 30000);
 
@@ -321,7 +348,7 @@ jQuery(document).ready(async function () {
             }
             $(".faq-interface__content-list").html("");
             jQuery('.faq-interface-main').css({'display':'none'});
-            await updateQuestionListData();
+            await getQuestionListData();
             updateQuestionList();
         });
 
@@ -329,7 +356,7 @@ jQuery(document).ready(async function () {
             hideAnswered = e.target.checked;
             $(".faq-interface__content-list").html("");
             jQuery('.faq-interface-main').css({'display':'none'});
-            await updateQuestionListData();
+            await getQuestionListData();
             updateQuestionList();
         });
     } else {

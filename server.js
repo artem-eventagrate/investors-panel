@@ -9,88 +9,102 @@ const express = require('express'),
     moment = require('moment'),
     request = require('request');
 
-var questionList = new Map();
+let eventId = "2a4c9d8b-e60d-4de0-b5aa-6431bb123a95";
+let serverPort = 8000;
+let questionList = new Map();
+let answeredList = new Map();
 
-async function updateQuestionList(eventId, stageId) {
+async function updateQuestionList() {
+    console.log("Get question list from server");
+
     const { data } = await axios.get(
-        "https://v01959iun4.execute-api.eu-central-1.amazonaws.com/prod/public/386293b6-e806-444f-b351-0c138abbeffe/questions");
+        "https://v01959iun4.execute-api.eu-central-1.amazonaws.com/prod/public/" + eventId + "/questions");
 
     for (let question of data) {
-        if (!questionList.has(question.id)) {
-            questionList.set(question.id, {
-                id: question.id,
-                userName: question.userName,
-                answered: false,
-                approved: question.approved,
-                text: question.question,
-                stageID: question.stageID
-            });
-        }
+        questionList.set(question.id, {
+            id: question.id,
+            userName: question.userName,
+            approved: question.approved,
+            text: question.question,
+            stageID: question.stageID
+        });
+    }
+}
+
+function restoreAnsweredList() {
+    console.log("Trying to restore answered list from file");
+    if (fs.existsSync('./resources/question-list.json')) {
+        fs.readFile('./resources/question-list.json', (err, data) => {
+            if (err) throw err;
+
+            if (data.toString().length > 0) {
+                putNewAnsweredQuestion(JSON.parse(data));
+            }
+        });
     }
 }
 
 async function writeQuestionListToFile() {
     let result = [];
 
-    for (const [key, value] of questionList.entries()) {
-        result.push(JSON.stringify(value));
+    for (const [key, value] of answeredList.entries()) {
+        result.push(JSON.stringify({
+            id: key,
+            answered: value
+        }));
     }
 
-    fs.writeFileSync('./resources/question-list.json', "[" + result.join(",") + "]", function (err) {
+    console.log('Saving answered list');
+    fs.writeFile('./resources/question-list.json', "[" + result.join(",") + "]", (err) => {
         if (err) throw err;
-        console.log('Question list saved');
+        console.log('Answered list saved');
     });
 }
 
-async function restoreQuestionListFromFile() {
-    if (fs.existsSync('./resources/question-list.json')) {
-        fs.readFile('./resources/question-list.json', (err, data) => {
-            if (err) throw err;
-            readData(JSON.parse(data));
-        });
-    } else {
-        await updateQuestionList();
-        await writeQuestionListToFile();
-    }
-}
-function readData(content) {
+function putNewAnsweredQuestion(content) {
     for (let question of content) {
-        questionList.set(question.id, question);
+        answeredList.set(question.id, question.answered);
     }
-}
-
-function getFileData(content) {
-    return content;
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // API
-app.get('/api/questionList', async (req, res) => {
+app.get('/api/questionList/:stageId', async (req, res) => {
     let result = [];
     for (const [key, value] of questionList.entries()) {
-        if (value.stageID == req.query.stageId) {
-            result.push(value);
+        if (value.stageID == req.params.stageId) {
+            let questionObject = value;
+            if (answeredList.has(value.id)) {
+                questionObject.answered = answeredList.get(value.id);
+            } else {
+                questionObject.answered = false;
+            }
+            result.push(questionObject);
         }
     }
-
     res.json(result);
 })
 
-app.post('/api/updateQuestionList', async (req, res) => {
-    let updatedObject = questionList.get(req.body.questionId);
-    updatedObject.answered = req.body.answered;
-    questionList.set(req.body.questionId, updatedObject);
+app.post('/api/updateQuestion', async (req, res) => {
+    answeredList.set(req.body.questionId, req.body.answered)
     await writeQuestionListToFile();
     res.json("OK");
 })
 
+app.post('/api/updateQuestionList', async (req, res) => {
+    await updateQuestionList();
+    res.json("OK");
+})
+
+// Server
 app.use(express.static('public'))
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
-app.listen(8000, async () => {
-    console.log("System: Listening on 8000");
-    await restoreQuestionListFromFile();
+app.listen(serverPort, async () => {
+    console.log("System: Listening on " + serverPort);
+    await updateQuestionList();
+    restoreAnsweredList();
 });
 
 process.on('uncaughtException', err => {
