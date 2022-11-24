@@ -10,7 +10,7 @@ const express = require('express'),
     request = require('request');
 
 let eventId = "2a4c9d8b-e60d-4de0-b5aa-6431bb123a95";
-let serverPort = 8000;
+let serverPort = 8080;
 let questionList = new Map();
 let answeredList = new Map();
 

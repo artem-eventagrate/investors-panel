@@ -5,7 +5,7 @@ jQuery(document).ready(async function () {
     let filter = "all";
     let hideAnswered = false;
     let idleTime = 0;
-    let apiUrl = "http://localhost:8000";
+    let apiUrl = "http://localhost:8081";
 
     stageList.set("1db2b01a-e4ce-4e4d-981b-dab2fc06e94c", {
         stageInnerId: "exhibition01",
@@ -52,7 +52,7 @@ jQuery(document).ready(async function () {
 
         // Setup properties and agora
         let channelParameters = {
-            appId: "a461a73b507042bcb2dda018dc794aee",
+            appId: "a61ae2bec03e4bdb843836695ab14785",
             isConnected: false,
             connectionStatus: "disconnected",
             channel: stageList.get(urlSearchParameters.get('stageId')).stageInnerId,
