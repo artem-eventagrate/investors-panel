@@ -5,32 +5,30 @@ jQuery(document).ready(async function () {
     let filter = "all";
     let hideAnswered = false;
     let idleTime = 0;
-    let apiUrl = "http://localhost:8081";
+    let apiUrl = "https://digital-twins-panel.eagdxb.online";
 
     stageList.set("1db2b01a-e4ce-4e4d-981b-dab2fc06e94c", {
         stageInnerId: "exhibition01",
-        // stageInnerId: "b89e5b24-f682-486e-bafa-50ab0c0c2645",
         stageName: "MINISTRY OF TOURISM"
     });
     stageList.set("b38f8bf1-de7a-46b1-aea4-c54209b28d6a", {
         stageInnerId: "exhibition02",
-        // stageInnerId: "fdda15a5-c096-4391-a52d-055f3b5374b6",
         stageName: "ACCELERATOR OF HUMAN PROGRESS (NEOM)"
     });
     stageList.set("ea0d36d5-74f7-47fc-b0b7-fbe05bf8bd1c", {
-        stageInnerId: "exhibition03",
+        stageInnerId: "exhibition08",
         stageName: "THE RED SEA DEVELOPMENT COMPANY"
     });
     stageList.set("de09bd18-05c4-48f8-9450-7fd5e1d5f13d", {
-        stageInnerId: "exhibition04",
+        stageInnerId: "exhibition06",
         stageName: "SHARQIA DEVELOPMENT AUTHORITY"
     });
     stageList.set("27ee2c81-4b00-4fa4-98cf-b6046f1cfe19", {
-        stageInnerId: "exhibition05",
+        stageInnerId: "exhibition04",
         stageName: "ASEER DEVELOPMENT AUTHORITY"
     });
     stageList.set("49585ac8-932d-4d72-9b70-76c60b0201ff", {
-        stageInnerId: "exhibition06",
+        stageInnerId: "exhibition03",
         stageName: "JEDDAH CENTRAL DEVELOPMENT COMPANY"
     });
     stageList.set("831f8d96-55d7-4874-82cf-7eb2ed6b8bb3", {
@@ -184,7 +182,7 @@ jQuery(document).ready(async function () {
         }
         function appendNewRecord(data, i) {
             let element = $(
-            `<li class="faq-interface__content-list-item" id="${data.id}">
+                `<li class="faq-interface__content-list-item" id="${data.id}">
                 <input type="checkbox" class="faq-interface__content-list-item-btn" id="faq-interface__content-list-item-btn--${i}">
                 <label class="faq-interface__content-list-item-wrap  flex  flex-dc" for="faq-interface__content-list-item-btn--${i}">
                     <div class="faq-interface__content-list-item-subtitle  flex">

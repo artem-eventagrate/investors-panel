@@ -20,6 +20,8 @@ async function updateQuestionList() {
     const { data } = await axios.get(
         "https://v01959iun4.execute-api.eu-central-1.amazonaws.com/prod/public/" + eventId + "/questions");
 
+    questionList.clear();
+
     for (let question of data) {
         questionList.set(question.id, {
             id: question.id,
@@ -76,6 +78,7 @@ app.use(bodyParser.json());
 // API
 app.get('/api/questionList/:stageId', (req, res) => {
     let result = [];
+    console.log(questionList)
     for (const [key, value] of questionList.entries()) {
         if (value.stageID === req.params.stageId) {
             let questionObject = value;
