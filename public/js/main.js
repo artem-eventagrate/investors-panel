@@ -5,7 +5,7 @@ jQuery(document).ready(async function () {
     let filter = "all";
     let hideAnswered = false;
     let idleTime = 0;
-    let apiUrl = "https://digital-twins-panel.eagdxb.online";
+    let apiUrl = "https://investors-panel.eagdxb.online";
 
     stageList.set("1db2b01a-e4ce-4e4d-981b-dab2fc06e94c", {
         stageInnerId: "exhibition01",
